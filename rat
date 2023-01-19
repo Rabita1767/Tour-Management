@@ -1,0 +1,583 @@
+<?php
+session_start();
+include('connection.php');
+
+
+?>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>List of Books</title>
+  <link rel="stylesheet" type="text/css" href="../css/book.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,400;1,300&family=Lato&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" />
+</head>
+<body>
+<div class="start">
+        <section id="nav-bar">
+            <div class="header">
+            <div class="navbar">
+                <div class="logo">
+                    <a href="">Online<span> Library</span></a>
+                </div>
+                <div class="menu">
+                    <ul>
+                        <li>
+                            <a href="index.html">HOME</a></li>
+                            <li><a href="">ABOUT US</a></li>
+                            <li> <a href="">SERVICES</a></li>
+                            <li><a href="book.php">BOOKS</a></li>
+                            <li><a href="feedback.php">FEEDBACK</a></li>
+                           
+                           <li> <a href="../template/contact.html">CONTACTS</a></li>
+        
+                          
+                           
+                           
+                        
+                    </ul>
+                </div>
+        
+                <div class="reg-btn">
+                    <a href="cart.php">CARTS</a>
+                </div>
+            </div>
+        
+
+    </div>
+    </section>
+
+    <div class="container text-center ">
+   
+    <h1 class="title mt-0 ">LIST OF BOOKS</h1>
+<?php
+$ids=$_GET['id'];
+$showquery="select * from book1 where id={$ids}";
+$showdata=mysqli_query($con,$showquery)or die( mysqli_error($con));
+$arrdata=mysqli_fetch_assoc($showdata);
+
+?>
+<div class="row">
+    <div class="col-md-3">
+    <div class="card">
+          <h4 class="card-title pb-2 pt-2 text-white  r1"><?php echo $arrdata['category'];?></h4>
+
+          <div class="card-body">
+          <img src="<?php echo $arrdata['image'];?>" alt="" class="img-fluid mb-2">
+
+          <h5><?php echo $arrdata['name'];?></h5>
+
+          <h6><?php echo $arrdata['writer'];?></h6>
+          <p>ISBN : <span><?php echo $arrdata['isbn'];?></span></p>
+          <h6 class="badge badge-success">
+                            <i class="fa fa-star">
+                            </i>
+                            <i class="fa fa-star">
+                            </i>
+                            <i class="fa fa-star">
+                            </i>
+                            <i class="fa fa-star">
+                            </i>
+                            <i class="fa fa-star-o">
+                            </i>
+                        </h6>
+
+                        <input type="text" name="quantity" class="form-control" value="1">
+               <input type="hidden" name="hidden_name" value="<?php echo $arrdata['name'];?>">
+               <input type="hidden" name="hidden_writer" value="<?php echo $arrdata['writer'];?>">
+
+
+
+
+          </div>
+          
+          <div >
+              
+              <h4 class="card-title text-center pb-2 pt-2 text-white  r1"><a class="card-title text-white" href="<?php echo $arrdata['link'];?>">Click</a></h4>
+              
+
+          </div>
+
+      </div>
+    
+      
+
+  
+    
+
+    
+    
+
+</div>
+</div>
+    </div>
+</div>
+
+<section id="footer">
+  
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 footer-box">
+      <h4>Address <i class="fa fa-map-marker"></i></h4>
+      <p>House-21<br>Motijheel<br>Dhaka</p>
+    </div>
+    <div class="col-md-4 footer-box">
+      <h4>Phone <i class="fa fa-phone"></i>
+
+      </h4>
+      <ul>
+        <li>
+          01767453687
+        </li>
+        <li>
+          01965348790
+        </li>
+        <li>
+          01897564323
+        </li>
+        <li>
+          01356795642
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-4 footer-box">
+      <h4>Email <i class="fa fa-envelope"></i></h4>
+      <ul>
+        <li>
+          eva@gmail.com
+        </li>
+        <li>
+          rabita@gmail.com
+        </li>
+        <li>
+          sumaiya@gmail.com
+        </li>
+        <li>
+          sahal@gmail.com
+        </li>
+      </ul>
+    </div>
+    
+  </div>
+
+</div>       
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
+
+
+
+<?php
+session_start();
+require('../vendor/autoload.php');
+$con=mysqli_connect('localhost','root','','webtech');
+
+//$res=mysqli_query($con,"select * from book1");
+
+$name=$_SESSION["email"];
+$item_array_id= array_column($_SESSION["shopping_cart"],"item_id");
+if(!empty($_SESSION["shopping_cart"]))
+{
+    foreach($_SESSION['shopping_cart'] as $keys => $values)
+    {
+        $res = $values["item_name"];
+        $res1 = $values["item_writer"];
+        $res2 = $values["item_quantity"];
+        $res3 = $_SESSION['userID'];
+        $html='
+        <style>
+                table,th,td{
+                    height: 30px;
+                    width: 200px;
+                }
+                table,th,tr{
+                    border: 2px solid black;
+                }
+                img {
+                    height: 110px;
+                    width: 100px;
+                }
+                .pdf_center{
+                    text-align: center;
+                }
+                #nb{
+                    font-weight: bold;
+                }
+                #td_cnt{
+                    font-size: 20px;
+                    font-weight: bold;
+                    margin-left: 1000px;
+                }
+        </style>
+        <div class="pdf_center">
+            <img src="../image/ju_logo.png" alt="" srcset="">
+            <h4>Institute of Information Technology</h4>
+            <h4>Jahangirnagar University</h4>
+            <h1>Claim Receipt</h1>
+        </div>
+        
+        <p>Validity: 2 weeks</p>
+        <p>Expiry Date:</p>
+        <table class="table">';
+        $html.='<tr><td>'.$res.'</td><td>'.$res1.'</td><td id="td_cnt">'.$res2.'</td></tr>';
+        
+        $html.='</table>
+        <style>
+        .pdf_footer img {
+            height: 2px;
+            width: 5px;
+        }
+        .pdf_footer{
+            margin-top: 200px;
+        }
+        </style>
+        <div>
+            <h4>Student Email: '.$name.' </h4>
+            
+                    
+            
+        </div>
+        <div class="pdf_footer">
+            <img src="../image/d_signature.png" alt="" srcset="">
+            <h4>Director</h4>
+            <h4>IIT, JU</h4>        
+            <p id="nb">N.B: After 2 weeks of issue date charge will be applicable for each day.</p>
+        
+        </div>';
+        // if(mysqli_num_rows($res)>0){
+        //     $html='
+        //     <style>
+        //         table,th,td{
+        //             height: 20px;
+        //             width: 90px;
+        //             font: 
+        //         }
+        //         table,th,tr{
+        //             border: 2px solid tomato;
+        //         }
+        //     </style>
+        //     <table class="table">';
+        //         $html.='<tr><td>ID</td><td>Date</td><td>Bus</td><td>Seat Reserve</td><td>Transaction No</td><td>Seat</td></tr>';
+        //         while($row=mysqli_fetch_assoc($res)){
+        //             $html.='<tr><td>'.$row['id'].'</td><td>'.$row['isbn'].'</td><td>'.$row['name'].'</td><td>'.$row['writer'].'</td></tr>';
+        //         }
+        //     $html.='</table>';
+        // }
+        // else
+        // {
+        //     $html="Data not found";
+        // }
+    }
+}
+$mpdf = new \Mpdf\Mpdf();
+$mpdf->WriteHTML($html);
+$file='media/'.time().'.pdf';
+$mpdf->output($file,'I');
+//D
+//I
+//F
+//S
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php
+session_start();
+include('connection.php');
+
+if(isset($_POST["add"]))
+{
+   if(isset( $_SESSION["shopping_cart"]))
+   {
+       $item_array_id= array_column($_SESSION["shopping_cart"],"item_id");
+       if(!in_array($_GET["id"],$item_array_id))
+       {
+           $count= count($_SESSION["shopping_cart"]);
+           $item_array=array(
+            'item_id' => $_GET["id"],
+            'item_name' => $_POST["hidden_name"],
+            'item_writer' => $_POST["hidden_writer"],
+            'item_quantity' => $_POST["quantity"]
+ 
+
+           );
+           $_SESSION["shopping_cart"][$count]= $item_array;
+
+        
+       }
+       else{
+           ?>
+           <script>alert("Book is already added");</script>
+           <script>window.location="book.php"</script>
+           <?php
+
+       }
+
+   }
+   else{
+       $item_array=array(
+           'item_id' => $_GET["id"],
+           'item_name' => $_POST["hidden_name"],
+           'item_writer' => $_POST["hidden_writer"],
+           'item_quantity' => $_POST["quantity"]
+
+
+       );
+       $_SESSION["shopping_cart"][0]=$item_array;
+   }
+
+}
+if(isset($_GET['action']))
+{
+    if($_GET['action'] =="delete")
+    {
+        foreach($_SESSION["shopping_cart"] as $keys => $values)
+        {
+            if($values["item_id"]==$_GET["id"])
+            {
+                unset($_SESSION["shopping_cart"][$keys]);
+                ?>
+                <script>alert('Book Removed');</script>
+                <script>window.location="cart.php"</script>
+                <?php
+            }
+        }
+
+
+    }
+
+}
+if(isset($_POST['search']))
+{
+  $valueToSearch=$_POST['valueToSearch'];
+  $query= "select * from book1 where CONCAT(name,writer,category) LIKE '%".$valueToSearch."%' UNION SELECT * 
+  FROM `book1` 
+  WHERE   
+   `name` = '".$valueToSearch."'
+     OR `writer` = '".$valueToSearch."'
+     OR `category` = '".$valueToSearch."'
+     
+     
+    
+";
+
+     
+  
+  $search_result=filterTable($query);
+
+}
+else{
+  $query="select * from book1";
+  $search_result=filterTable($query);
+
+}
+function filterTable($query)
+{
+  $connect=mysqli_connect("localhost","root","","webtech");
+$filter_Result=mysqli_query($connect,$query)  or die( mysqli_error($connect));
+
+return $filter_Result;
+}
+?>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" type="text/css" href="../css/newcart.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+ 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ <link rel="preconnect" href="https://fonts.gstatic.com">
+
+    <title>Cart items</title>
+</head>
+<body>
+   <div class="ratri">
+     <div class="row">
+       <div class="col-md-6">
+         <div class="navbar">
+         <div class="logo">
+                <a href="indexnew.php">Online<span> Library</span></a>
+            </div>
+         </div>
+
+
+       </div>
+       <div class="col-md-6">
+       <form action="book.php"  method="post" >
+            <div class="search">
+            <div class="s1">
+                <div class="s2">
+                    <input type="text" class="input"  name="valueToSearch" >
+                    <div class="btn btn_common">
+                    <input type="submit" class="btn btn-success" name="search" value="Filter">
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+            </form>
+
+       </div>
+     </div>
+   </div>
+   <section id="nav">
+     <div class="container">
+     <div class="menu">
+                <ul>
+                    <li class="r1">
+                        <a href="../index.html">Home</a></li>
+                        <li><a href="aboutdemo.php">Services</a></li>
+                       <li> <a href="book.php">Book</a></li>
+                       <li> <a href="servicedemo.php">Services</a></li>
+                       <li class="reg-btn"> <a href="cart.php">Cart</a></li>
+                       
+                    
+                </ul>
+                
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+
+
+              </div>
+              <div class="col-md-8">
+              <div class="table-responsive">
+        <table class="table table-bordered">
+            <tr class="icon">
+                <th width="30%">Name</th>
+                <th width="30%">Writer Name</th>
+                <th width="10%">Quantity</th>
+                <th width="5%">Action</th>
+
+                
+                
+            </tr>
+            <?php
+            if(!empty($_SESSION["shopping_cart"]))
+            {
+                //$total=0;
+                foreach($_SESSION["shopping_cart"] as $keys => $values)
+                {
+                    ?>
+                    <tr class="icon">
+                        <td><?php echo $values["item_name"] ; ?></td>
+                        <td><?php echo $values["item_writer"] ; ?></td>
+                        <td><?php echo $values["item_quantity"] ; ?></td>
+                        <td><a href="book.php?action=delete&id=<?php echo $values["item_id"] ;?>"><span class="text-danger"><i class="fa fa-trash"></i></span></a></td>
+
+                    </tr>
+                    <?php
+                }
+
+            }
+            ?>
+
+      </table>
+
+    </div>
+    <div class="b2">
+      <a href="pdf_generator.php"> <data-toggle="tooltip" data-placement="top" title="Proceed">Proceed to Continue<i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+
+      </div>
+
+
+              </div>
+            </div>
+            
+
+     </div>
+
+   </section>
+   
+   <section id="footer">
+  
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 footer-box">
+        <h4>Address <i class="fa fa-map-marker"></i></h4>
+        <p>House-21<br>Motijheel<br>Dhaka</p>
+      </div>
+      <div class="col-md-4 footer-box">
+        <h4>Phone <i class="fa fa-phone"></i>
+  
+        </h4>
+        <ul>
+          <li>
+            01767453687
+          </li>
+          <li>
+            01965348790
+          </li>
+          <li>
+            01897564323
+          </li>
+          <li>
+            01356795642
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-4 footer-box">
+        <h4>Email <i class="fa fa-envelope"></i></h4>
+        <ul>
+          <li>
+            eva@gmail.com
+          </li>
+          <li>
+            rabita@gmail.com
+          </li>
+          <li>
+            sumaiya@gmail.com
+          </li>
+          <li>
+            sahal@gmail.com
+          </li>
+        </ul>
+      </div>
+      
+    </div>
+  
+  </div>       
+  </section>
+
+      
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+</body>
+</html>
